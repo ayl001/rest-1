@@ -1,5 +1,8 @@
 import requests
 import json
+import time
+import locale
+import sys
 
 class SpaceInfo:
 
@@ -18,10 +21,17 @@ class SpaceInfo:
         data = json.loads(text)
         return data
 
+# Configurer la langue pour le français et forcer l'encodage UTF-8
+locale.setlocale(locale.LC_TIME, "fr_FR.UTF-8")
+sys.stdout.reconfigure(encoding="utf-8")
+
 test_api = SpaceInfo()
 
 print(test_api.position()['iss_position'])
-print(test_api.position()['timestamp'])
+
+seconds=test_api.position()['timestamp']
+date_fr = time.strftime("%A %d %B %Y %H:%M:%S", time.localtime(seconds))
+print("Heure locale en français :", date_fr)
 
 print('\n')
 
@@ -29,7 +39,6 @@ test2_api = test_api.recensement()
 dans_iss = []
 population = 0
 people = test2_api['people']
-
 
 for quidam in people:
     if quidam['craft'] == "ISS":
